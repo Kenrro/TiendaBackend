@@ -1,7 +1,9 @@
 package com.ecomerce.ecomerce.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,8 +29,7 @@ public class User {
     private String lastname;
     private String username;
     private String password;
-    @OneToMany
-    @JoinColumn(name = "user_id", nullable = false)
-    private List<Cart> carts;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cart> carts = new ArrayList<>();
 
 }

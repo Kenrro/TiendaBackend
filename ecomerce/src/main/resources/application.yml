@@ -3,7 +3,7 @@ spring:
         name: ecomerce
 
     datasource:
-        url: jdbc:mysql://dv:3306/ecomerce_db
+        url: jdbc:mysql://localhost:3307/app_db
         username: root
         password: root
 
