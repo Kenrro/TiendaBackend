@@ -1,14 +1,15 @@
-package com.ecomerce.ecomerce.dto;
+package com.ecomerce.ecomerce.dto.auth;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class AuthResponse {
-    String token;
+public class LoginRequest {
+
+    private String username;
+    private String password;
+
 }

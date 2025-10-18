@@ -3,9 +3,9 @@ package com.ecomerce.ecomerce.controller.auth;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecomerce.ecomerce.dto.AuthResponse;
-import com.ecomerce.ecomerce.dto.LoginRequest;
-import com.ecomerce.ecomerce.dto.RegisterRequest;
+import com.ecomerce.ecomerce.dto.auth.AuthResponse;
+import com.ecomerce.ecomerce.dto.auth.LoginRequest;
+import com.ecomerce.ecomerce.dto.auth.RegisterRequest;
 import com.ecomerce.ecomerce.service.AuthService;
 
 import lombok.RequiredArgsConstructor;

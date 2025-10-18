@@ -1,4 +1,4 @@
-package com.ecomerce.ecomerce.dto;
+package com.ecomerce.ecomerce.dto.auth;
 
 import com.ecomerce.ecomerce.role.UserRole;
 

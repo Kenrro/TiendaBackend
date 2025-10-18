@@ -5,9 +5,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ecomerce.ecomerce.dto.AuthResponse;
-import com.ecomerce.ecomerce.dto.LoginRequest;
-import com.ecomerce.ecomerce.dto.RegisterRequest;
+import com.ecomerce.ecomerce.dto.auth.AuthResponse;
+import com.ecomerce.ecomerce.dto.auth.LoginRequest;
+import com.ecomerce.ecomerce.dto.auth.RegisterRequest;
 import com.ecomerce.ecomerce.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.ecomerce.ecomerce.repository.UserRepository;
