@@ -1,6 +1,7 @@
 package com.ecomerce.ecomerce.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,9 @@ import com.ecomerce.ecomerce.dto.auth.AuthResponse;
 import com.ecomerce.ecomerce.dto.auth.LoginRequest;
 import com.ecomerce.ecomerce.dto.auth.RegisterRequest;
 import com.ecomerce.ecomerce.entity.User;
+import com.ecomerce.ecomerce.enums.UserError;
+import com.ecomerce.ecomerce.exception.GeneralEcomerceException;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import com.ecomerce.ecomerce.repository.UserRepository;
 
@@ -36,7 +40,11 @@ public class AuthService {
             .build();
     }
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        try{
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        } catch(BadCredentialsException e){
+            throw new GeneralEcomerceException(UserError.USER_NOT_FOUND);
+        }
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         String token = jwtService.generatedToken(user);
         return AuthResponse.builder()
