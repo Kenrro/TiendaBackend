@@ -23,7 +23,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         Map<String, Object> body = new HashMap<>();
         body.put("Timestamp", LocalDateTime.now());
         body.put("Status", e.getHttpStatus());
-        body.put("Error", new ErrorDto(e.description));
+        body.put("Error", new ErrorDto(e.getMessage()));
         return ResponseEntity.status(e.getHttpStatus()).body(body);
     }
 }

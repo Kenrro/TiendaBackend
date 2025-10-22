@@ -19,4 +19,18 @@ public class GeneralEcomerceException extends RuntimeException {
         this.httpStatus = error.getHttpStatus();
         this.description = error.getMessage();
     }
+    public <T extends IError> GeneralEcomerceException(T error, Throwable cause) {
+    super(error.getMessage(), cause);
+    this.httpStatus = error.getHttpStatus();
+
+    // Si el cause tiene un mensaje más detallado, lo limpiamos un poco
+    String cleanMessage = cause.getMessage();
+    if (cleanMessage != null) {
+        // Opcional: elimina trazas SQL o detalles internos
+        int idx = cleanMessage.indexOf("; SQL");
+        if (idx > 0) cleanMessage = cleanMessage.substring(0, idx);
+    }
+
+    this.description = error.getMessage() + (cleanMessage != null ? ": " + cleanMessage : "");
+}
 }

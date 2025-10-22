@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +12,8 @@ import com.ecomerce.ecomerce.dto.products.ProductRequestDto;
 import com.ecomerce.ecomerce.dto.products.ProductResponseDto;
 import com.ecomerce.ecomerce.entity.Product;
 import com.ecomerce.ecomerce.entity.ProductFamily;
-import com.ecomerce.ecomerce.entity.User;
+import com.ecomerce.ecomerce.enums.ProductError;
+import com.ecomerce.ecomerce.exception.GeneralEcomerceException;
 import com.ecomerce.ecomerce.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class ProductService {
     // ddl-auto create-drop is activated in application.yml for testing purposes
     // 👍 Implement the crud for products families too
     // 👍 Create exception handler for all entities
+    // Repair stock
     final ProductRepository productRepository;
     final ProductFamilyService productFamilyService;
     // Create Product
@@ -38,6 +41,9 @@ public class ProductService {
                 productFamilyService.getProductFamilyById(productRequestDto.getProductFamily()).getId()
             ).build())
             .build();
+        try{product = productRepository.save(product);}
+        catch (DataIntegrityViolationException e) {throw new GeneralEcomerceException(ProductError.CONSTRAINS_VIOLATION, e);}
+        catch (Exception e) {throw new GeneralEcomerceException(ProductError.ERROR_CREATING_PRODUCT, e);}
         return ProductResponseDto.builder()
             .id(productRepository.save(product).getId())
             .name(product.getName())
@@ -49,7 +55,7 @@ public class ProductService {
     }
     // Get Product by Id
     public ProductResponseDto getProductById(Long id) {
-    Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+    Product product = productRepository.findById(id).orElseThrow(() -> new GeneralEcomerceException(ProductError.PRODUCT_NOT_FOUND));
     return ProductResponseDto.builder()
         .id(product.getId())
         .name(product.getName())
@@ -60,6 +66,7 @@ public class ProductService {
         .build();
     }
     public List<ProductResponseDto> getAllProductsFromFamily(Long familyId) {
+        productFamilyService.getProductFamilyById(familyId);
         List<Product> products = productRepository.findAllByProductFamily_Id(familyId);
         return products.stream().map(product -> ProductResponseDto.builder()
             .id(product.getId())

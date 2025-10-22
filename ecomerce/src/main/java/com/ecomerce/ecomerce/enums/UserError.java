@@ -5,7 +5,9 @@ import org.springframework.http.HttpStatus;
 public enum UserError implements IError {
     BAD_CREDENTIALS(HttpStatus.NOT_FOUND, "Bad credentials"),
     ERROR_DELETING_USER(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting user"),
-    ERROR_CREATING_USER(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating user");
+    ERROR_CREATING_USER(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating user"),
+    CONSTRAINS_VIOLATION(HttpStatus.CONFLICT, "Duplicate entry");
+    ;
     
     UserError(HttpStatus httpStatus, String message){
         this.httpStatus = httpStatus;
@@ -17,7 +19,6 @@ public enum UserError implements IError {
     public HttpStatus getHttpStatus() {
         return httpStatus;    
     }
-
     @Override
     public String getMessage() {
         return message;    
