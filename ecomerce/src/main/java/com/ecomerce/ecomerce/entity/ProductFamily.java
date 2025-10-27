@@ -1,6 +1,5 @@
 package com.ecomerce.ecomerce.entity;
 
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

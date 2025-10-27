@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ecomerce.ecomerce.dto.products.ProductRequestDto;
 import com.ecomerce.ecomerce.dto.products.ProductResponseDto;
+import com.ecomerce.ecomerce.dto.products.ProductStockRequestDto;
 import com.ecomerce.ecomerce.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -52,5 +53,11 @@ public class ProductsController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteProduct(@PathVariable Long id) {
         return ResponseEntity.ok(productService.deleteProduct(id));
+    }
+    // Stock
+    // TODO: Testing to this endpoint a repair other
+    @PutMapping("/stock")
+    public ResponseEntity<ProductResponseDto> putMethodName(@RequestBody ProductStockRequestDto request) {
+        return ResponseEntity.ok(productService.updateStock(request));
     }
 }

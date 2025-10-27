@@ -8,6 +8,7 @@ public enum ProductError implements IError {
     ERROR_CREATING_PRODUCT(HttpStatus.INTERNAL_SERVER_ERROR, "an error ocurred while creating the product"),
     ERROR_UPDATING_PRODUCT(HttpStatus.INTERNAL_SERVER_ERROR, "an error ocurred while updating the product"),
     ERROR_DELETING_PRODUCT(HttpStatus.INTERNAL_SERVER_ERROR, "an error ocurred while deleting the product"),
+    THE_MINIMUM_STOCK_IS_ZERO(HttpStatus.BAD_REQUEST, "The minimum stock is zero"), 
     CONSTRAINS_VIOLATION(HttpStatus.CONFLICT, "Duplicate entry");
     ProductError(HttpStatus httpStatus, String message){
         this.httpStatus = httpStatus;
