@@ -10,11 +10,14 @@ import com.ecomerce.ecomerce.dto.cart.CartItemResponseDTO;
 import com.ecomerce.ecomerce.dto.cart.CartResponseDto;
 import com.ecomerce.ecomerce.entity.Cart;
 import com.ecomerce.ecomerce.entity.CartItem;
+import com.ecomerce.ecomerce.entity.Product;
 import com.ecomerce.ecomerce.entity.User;
 import com.ecomerce.ecomerce.enums.CartError;
+import com.ecomerce.ecomerce.enums.ProductError;
 import com.ecomerce.ecomerce.exception.GeneralEcomerceException;
 import com.ecomerce.ecomerce.repository.CartItemsRepository;
 import com.ecomerce.ecomerce.repository.CartRepository;
+import com.ecomerce.ecomerce.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +29,7 @@ public class CartService {
     final UserService userService;
     final AuthService authService;
     final CartItemsRepository cartItemsRepository;
+    final ProductRepository productRepository;
 
     
     // get cart
@@ -56,12 +60,14 @@ public class CartService {
     }
     // ---------------------
     public CartItemResponseDTO addCartItemToCart(CartItemRequestDto request) {
-        CartItem cartItem = cartItemsRepository.findByCartIdAndProductId(request.getCart(), request.getProduct().getId()).orElse(null);
+        User user = authService.getAuthenticatedUser();
+        CartItem cartItem = cartItemsRepository.findByCartIdAndProductId(user.getCart().getId(), request.getProductId()).orElse(null);
         if (cartItem == null) {
+            Product product = productRepository.findById(request.getProductId()).orElseThrow(()-> new GeneralEcomerceException(ProductError.PRODUCT_NOT_FOUND));
             cartItem = cartItemsRepository.save(
                 CartItem.builder()
-                    .cart(Cart.builder().id(request.getCart()).build())
-                    .product(request.getProduct())
+                    .cart(Cart.builder().id(user.getCart().getId()).build())
+                    .product(product)
                     .quantity(request.getQuantity())
                     .build()
             );
@@ -86,7 +92,8 @@ public class CartService {
     }
     // Implement Dto and errors for mor information 
     public CartItemResponseDTO removeItemToCart(CartItemRequestDto request) {
-        CartItem cartItem = cartItemsRepository.findByCartIdAndProductId(request.getCart(), request.getProduct().getId()).orElseThrow(()->
+        User user = authService.getAuthenticatedUser();
+        CartItem cartItem = cartItemsRepository.findByCartIdAndProductId(user.getCart().getId(), request.getProductId()).orElseThrow(()->
             new GeneralEcomerceException(CartError.PRODUCT_IS_NOT_IN_THE_CART)
         );
         cartItem.setQuantity(cartItem.getQuantity()-request.getQuantity());

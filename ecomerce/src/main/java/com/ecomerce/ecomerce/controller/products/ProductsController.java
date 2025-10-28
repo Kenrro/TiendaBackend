@@ -8,6 +8,7 @@ import com.ecomerce.ecomerce.dto.products.ProductResponseDto;
 import com.ecomerce.ecomerce.dto.products.ProductStockRequestDto;
 import com.ecomerce.ecomerce.service.ProductService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -30,11 +31,11 @@ public class ProductsController {
 
     final ProductService productService;
     @PostMapping
-    public ResponseEntity<ProductResponseDto> createProduct(@RequestBody ProductRequestDto productRequestDto) {
+    public ResponseEntity<ProductResponseDto> createProduct(@Valid @RequestBody ProductRequestDto productRequestDto) {
         return ResponseEntity.ok(productService.createProduct(productRequestDto));
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> getProductById(@org.springframework.web.bind.annotation.PathVariable Long id) {
+    public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductById(id));
     }
     @GetMapping("/family/{familyId}")
@@ -46,7 +47,7 @@ public class ProductsController {
         return ResponseEntity.ok(productService.getAllProducts());
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable Long id, @RequestBody ProductRequestDto request) {
+    public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequestDto request) {
         
         return ResponseEntity.ok(productService.updateProduct(id, request));
     }
@@ -57,7 +58,7 @@ public class ProductsController {
     // Stock
     // TODO: Testing to this endpoint a repair other
     @PutMapping("/stock")
-    public ResponseEntity<ProductResponseDto> putMethodName(@RequestBody ProductStockRequestDto request) {
+    public ResponseEntity<ProductResponseDto> putMethodName(@Valid @RequestBody ProductStockRequestDto request) {
         return ResponseEntity.ok(productService.updateStock(request));
     }
 }

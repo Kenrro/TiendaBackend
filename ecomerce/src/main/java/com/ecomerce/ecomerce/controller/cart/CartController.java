@@ -10,6 +10,7 @@ import com.ecomerce.ecomerce.dto.cart.CartItemResponseDTO;
 import com.ecomerce.ecomerce.dto.cart.CartResponseDto;
 import com.ecomerce.ecomerce.service.CartService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,11 +32,11 @@ public class CartController {
         return ResponseEntity.ok(cartService.getCart());
     }
     @PostMapping("/item")
-    public ResponseEntity<CartItemResponseDTO> addItemToCart(@RequestBody CartItemRequestDto entity) {
+    public ResponseEntity<CartItemResponseDTO> addItemToCart(@Valid @RequestBody CartItemRequestDto entity) {
         return ResponseEntity.ok(cartService.addCartItemToCart(entity));
     }
     @DeleteMapping("/item")
-    public ResponseEntity<CartItemResponseDTO> removeItemToCart(@RequestBody CartItemRequestDto entity){
+    public ResponseEntity<CartItemResponseDTO> removeItemToCart(@Valid @RequestBody CartItemRequestDto entity){
         return ResponseEntity.ok(cartService.removeItemToCart(entity));
     }
     

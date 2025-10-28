@@ -11,6 +11,7 @@ import com.ecomerce.ecomerce.dto.families.FamilyRequestDto;
 import com.ecomerce.ecomerce.dto.families.FamilyResponseDto;
 import com.ecomerce.ecomerce.service.ProductFamilyService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,11 +28,11 @@ public class ProductsFamilyController {
         return ResponseEntity.ok(productFamilyService.getProductFamilyById(id));
     }
     @PostMapping
-    public ResponseEntity<FamilyResponseDto> createFamily(@RequestBody FamilyRequestDto entity) {
+    public ResponseEntity<FamilyResponseDto> createFamily(@Valid @RequestBody FamilyRequestDto entity) {
         return ResponseEntity.ok(productFamilyService.createProductFamily(entity));
     }
     @PutMapping("/id")
-    public ResponseEntity<FamilyResponseDto> updataFamily(@RequestBody FamilyRequestDto familyRequestDto, @PathVariable Long id){
+    public ResponseEntity<FamilyResponseDto> updataFamily(@Valid @RequestBody FamilyRequestDto familyRequestDto, @PathVariable Long id){
         return ResponseEntity.ok(productFamilyService.updateProductFamily(id, familyRequestDto));
     }
     @DeleteMapping("id")
