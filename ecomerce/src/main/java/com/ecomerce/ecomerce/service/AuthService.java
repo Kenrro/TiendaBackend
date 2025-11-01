@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecomerce.ecomerce.dto.auth.AuthResponse;
+import com.ecomerce.ecomerce.dto.auth.AuthUserResponse;
 import com.ecomerce.ecomerce.dto.auth.LoginRequest;
 import com.ecomerce.ecomerce.dto.auth.RegisterRequest;
 import com.ecomerce.ecomerce.entity.Cart;
@@ -68,7 +69,7 @@ public class AuthService {
             .token(token)
             .build();
     }
-     public User getAuthenticatedUser() {
+    public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -83,5 +84,31 @@ public class AuthService {
         }
 
         throw new GeneralEcomerceException(UserError.BAD_CREDENTIALS);
+    }
+    public AuthUserResponse verifyToken(String token) {
+        try {
+            if (token.startsWith(("Bearer "))) {
+                token = token.substring(7);
+            }
+
+            String username = jwtService.getUsernameFromToken(token);
+            if (username == null) {
+                throw new GeneralEcomerceException((UserError.BAD_CREDENTIALS));
+            }
+            User user = userRepository.findByUsername(username)
+                .orElseThrow(()-> new GeneralEcomerceException(UserError.BAD_CREDENTIALS));
+
+            boolean isValid = jwtService.isTokenValid(token, user);
+            if(!isValid) {
+                throw new GeneralEcomerceException((UserError.BAD_CREDENTIALS));
+            }
+            return AuthUserResponse.builder()
+                .username(user.getUsername())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .build();
+        } catch (Exception e) {
+            throw new GeneralEcomerceException((UserError.BAD_CREDENTIALS));
+        }
     }
 }
